@@ -39,7 +39,7 @@ namespace StudentRegisterWithJSON
                     return;
                 }
                 students.Add(new Student(name, grade));
-                var json = JsonSerializer.Serialize(students, new JsonSerializerOptions { WriteIndented = true});
+                var json = JsonSerializer.Serialize(students, new JsonSerializerOptions { WriteIndented = true });
                 File.WriteAllText("students.txt", json);
                 Console.WriteLine("Student added successfully.");
             }
@@ -55,9 +55,9 @@ namespace StudentRegisterWithJSON
             List<Student> ofGrade = students.Where(student => student.Grade == grade).ToList();
             foreach (Student student in ofGrade)
             {
-  
-                    Console.WriteLine(student.Name);
- 
+
+                Console.WriteLine(student.Name);
+
             }
         }
         internal class Program
@@ -66,8 +66,20 @@ namespace StudentRegisterWithJSON
             {
 
                 Register School = new Register();
-                var json = File.ReadAllText("students.txt");
-                School.students = JsonSerializer.Deserialize<List<Student>>(json);
+
+                try
+                {
+                    string json = File.ReadAllText("students.txt");
+                    School.students = JsonSerializer.Deserialize<List<Student>>(json);
+
+                }
+                catch (FileNotFoundException)
+                {
+                    Console.WriteLine("No json serlialized list found. Please look at your repositories and try again");
+                    Console.WriteLine("Make sure you have a \"students.txt\" document in your files before starting.");
+                    Console.ReadLine();
+                    Environment.Exit(1);
+                }
 
                 bool isRunning = true;
 
@@ -89,16 +101,16 @@ namespace StudentRegisterWithJSON
                                 int grade;
                                 try
                                 {
-      
-                                        grade = Convert.ToInt32(Console.ReadLine());
-                                        if (grade < 1 || grade > 6)
-                                        {
-                                            Console.WriteLine("Please write a whole number 1-6.");
-                                            Console.WriteLine("Press any key return.");
-                                            Console.Read();
+
+                                    grade = Convert.ToInt32(Console.ReadLine());
+                                    if (grade < 1 || grade > 6)
+                                    {
+                                        Console.WriteLine("Please write a whole number 1-6.");
+                                        Console.WriteLine("Press any key return.");
+                                        Console.Read();
                                         break;
-                                        }
-                                      
+                                    }
+
                                 }
                                 catch (FormatException)
                                 {
